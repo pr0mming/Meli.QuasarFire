@@ -1,0 +1,59 @@
+definitions:
+  aggregate.TopSecretCoordsResponse:
+    properties:
+      x:
+        type: number
+      "y":
+        type: number
+    type: object
+  aggregate.TopSecretRequest:
+    properties:
+      satellites:
+        items:
+          $ref: '#/definitions/aggregate.TopSecretSatelliteRequest'
+        type: array
+    type: object
+  aggregate.TopSecretResponse:
+    properties:
+      message:
+        type: string
+      position:
+        $ref: '#/definitions/aggregate.TopSecretCoordsResponse'
+    type: object
+  aggregate.TopSecretSatelliteRequest:
+    properties:
+      distance:
+        type: number
+      message:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /topsecret:
+    post:
+      consumes:
+      - application/json
+      description: get the location and the decoded message using the right POST data
+      parameters:
+      - description: Satellites JSON
+        in: body
+        name: satellites
+        required: true
+        schema:
+          $ref: '#/definitions/aggregate.TopSecretRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/aggregate.TopSecretResponse'
+      summary: get the location and the decoded message
+      tags:
+      - Meli.QuasarFire
+swagger: "2.0"

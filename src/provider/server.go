@@ -1,18 +1,21 @@
 package provider
 
 import (
-	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (server *Server) RegisterHandlers(g *gin.Engine) {
+func (server *Server) RegisterHandlers(r *gin.Engine) {
 
-	fmt.Println("joa")
+	v1 := r.Group("/")
+	{
+		topSecretHdl := server.TopSecretHandler
 
-	topSecretHdl := server.TopSecretHandler
+		// Register your endpoints here with the handler
+		v1.POST("/topsecret", dispatchHandler(topSecretHdl.Handle))
 
-	g.POST("/topsecret", dispatchHandler(topSecretHdl.Handle))
+	}
 
 }
 
@@ -22,11 +25,13 @@ func dispatchHandler(f func(c *gin.Context) (interface{}, error)) gin.HandlerFun
 		response, err := f(c)
 
 		if err != nil {
-			c.JSON(404, err)
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": err.Error(),
+			})
 			return
 		}
 
-		c.JSON(200, response)
+		c.JSON(http.StatusOK, response)
 	}
 
 }
