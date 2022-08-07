@@ -20,7 +20,7 @@ Otherwise if you has made changes in the project you can use this commands:
 
 - Use `make generate` from the project root for generate the dependencies with Wire
 - Use `make swagger` from the project root for generate the Swagger Documentation
-- Use `make all` (recommended) is the plus between `make generate` and `make run`
+- Use `make all` (recommended) is the plus between `make generate` `make swagger` and `make run`
 - Use `make test` for test the `GetLocation` and `GetMessage` methods
 
 ## References 

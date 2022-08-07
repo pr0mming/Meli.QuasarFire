@@ -12,11 +12,11 @@ func (server *Server) RegisterHandlers(r *gin.Engine) {
 	{
 
 		// Register your endpoints here with the handler
-		// fs = First Satellite, ss = Seconds Satellite
+		// fs = First Satellite, ss = Second Satellite, ts = Third Satellite
 
 		v1.POST("/topsecret", dispatchHandler(server.TopSecretHandler.Handle))
-		v1.POST("/topsecret_split/:fs_name/:ss_name", dispatchHandler(server.TopSecretSplitHandler.Handle))
-		v1.GET("/topsecret_split/:fs_name/:fs_distance/:fs_message/:ss_name/:ss_distance/:ss_message", dispatchHandler(server.TopSecretSplitHandler.Handle))
+		v1.POST("/topsecret_split/:fs_name/:ss_name/:ts_name", dispatchHandler(server.TopSecretSplitHandler.HandlePost))
+		v1.GET("/topsecret_split", dispatchHandler(server.TopSecretSplitHandler.HandleGet))
 
 	}
 

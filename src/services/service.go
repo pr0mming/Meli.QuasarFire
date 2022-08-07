@@ -1,9 +1,91 @@
 package services
 
 import (
+	"errors"
+	"fmt"
 	"math"
+	"sort"
 	"strings"
+
+	"meli.quasarfire/src/aggregate"
+	"meli.quasarfire/src/constants"
 )
+
+func (s *TopSecretService) GetEnemyStarship(parameters *aggregate.TopSecretRequest) (*aggregate.TopSecretResponse, error) {
+
+	var (
+		messages        [][]string
+		distances       []float32
+		starShipsPoints []map[string]float64
+	)
+
+	// Check: Is necessary least 2 points for get the location
+	if len(parameters.Satellites) <= 1 {
+		return nil, errors.New("sorry, we need at least two (2) points for get the location")
+	}
+
+	// Iterate satellites for extract message and distances
+	for _, m := range parameters.Satellites {
+
+		if len(m.Message) > 0 {
+			messages = append(messages, m.Message)
+		}
+
+		point, ok := constants.STARSHIPS[strings.ToLower(m.Name)]
+
+		if !ok {
+			return nil, fmt.Errorf("sorry, but the ship name '%s' is unknown", m.Name)
+		}
+
+		// Check: The distances values must be great than 0
+		if m.Distance <= 0 {
+			return nil, fmt.Errorf("sorry, but the distance for the satellite %s must be great than 0", m.Name)
+		}
+
+		if len(starShipsPoints) < 2 {
+			starShipsPoints = append(starShipsPoints, map[string]float64{"x": float64(point[0]), "y": float64(point[1])})
+			distances = append(distances, m.Distance)
+
+			continue
+		}
+
+		break
+
+	}
+
+	if len(messages) == 0 {
+		return nil, fmt.Errorf("sorry, but we need at least one (1) item in the message for at least one (1) satellite for decode the message")
+	}
+
+	// Get the distance between the two starships (positions)
+	_xDiff := math.Pow(float64(starShipsPoints[1]["x"]-starShipsPoints[0]["x"]), 2)
+	_yDiff := math.Pow(float64(starShipsPoints[1]["y"]-starShipsPoints[0]["y"]), 2)
+	_distanceStarShips := float32(math.Sqrt(_xDiff + _yDiff))
+
+	// Append the distance in the first position,
+	// because the first one is the distance between the starships the others is the user distances given
+	distances = append([]float32{_distanceStarShips}, distances...)
+
+	x, y := s.GetLocation(GetLocationStarshipPoints{
+		Point1: starShipsPoints[0],
+		Point2: starShipsPoints[1],
+	}, distances...)
+
+	if math.IsNaN(float64(x)) || math.IsNaN(float64(y)) {
+		return nil, errors.New("sorry, we cannot  calculate the position because any of the locations coords in NaN value")
+	}
+
+	decodedMessage := s.GetMessage(messages...)
+
+	return &aggregate.TopSecretResponse{
+		Position: aggregate.TopSecretCoordsResponse{
+			X: x,
+			Y: y,
+		},
+		Message: decodedMessage,
+	}, nil
+
+}
 
 func (s *TopSecretService) GetLocation(points GetLocationStarshipPoints, distances ...float32) (x, y float32) {
 
@@ -48,6 +130,7 @@ func (s *TopSecretService) GetMessage(messages ...[]string) (msg string) {
 
 				message := records[i]
 
+				// Save how many is repeated the word in the position
 				if message != nil {
 
 					message[_word] += 1
@@ -66,23 +149,32 @@ func (s *TopSecretService) GetMessage(messages ...[]string) (msg string) {
 
 	}
 
-	for _, v := range records {
+	// Sort map by keys
 
-		wordWeight := -1
-		word := ""
-		lastWord := ""
+	keys := make([]int, 0, len(records))
 
-		for k_k, v_v := range v {
+	for k := range records {
+		keys = append(keys, k)
+	}
+
+	sort.Ints(keys)
+
+	lastWord := "" // Current word and used for avoid duplicates words next to other word
+
+	for _, k := range keys {
+
+		wordWeight := -1 // Check which word is most repeated in the position
+
+		for k_k, v_v := range records[k] {
 
 			if v_v > wordWeight && k_k != lastWord {
 				wordWeight = v_v
-				word = k_k
 				lastWord = k_k
 			}
 
 		}
 
-		decodedMesage = append(decodedMesage, word)
+		decodedMesage = append(decodedMesage, lastWord)
 
 	}
 

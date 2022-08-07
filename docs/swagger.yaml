@@ -31,6 +31,13 @@ definitions:
       name:
         type: string
     type: object
+  aggregate.TopSecretSplitRequest:
+    properties:
+      satellites:
+        items:
+          $ref: '#/definitions/aggregate.TopSecretSplitSatelliteRequest'
+        type: array
+    type: object
   aggregate.TopSecretSplitSatelliteRequest:
     properties:
       distance:
@@ -67,16 +74,7 @@ paths:
       - Meli.QuasarFire
   /topsecret_split:
     get:
-      consumes:
-      - application/json
       description: get the location and the decoded message using the right POST data
-      parameters:
-      - description: Satellites JSON
-        in: body
-        name: satellites
-        required: true
-        schema:
-          $ref: '#/definitions/aggregate.TopSecretSplitSatelliteRequest'
       produces:
       - application/json
       responses:
@@ -84,6 +82,43 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/aggregate.TopSecretResponse'
+      summary: get the location and the decoded message
+      tags:
+      - Meli.QuasarFire
+  /topsecret_split/{fs_name}/{ss_name}/{ts_name}:
+    post:
+      consumes:
+      - application/json
+      description: get the location and the decoded message using the right POST data
+      parameters:
+      - description: First Satellite name
+        in: path
+        name: fs_name
+        required: true
+        type: string
+      - description: Seconds Satellite name
+        in: path
+        name: ss_name
+        required: true
+        type: string
+      - description: Third Satellite name
+        in: path
+        name: ts_name
+        required: true
+        type: string
+      - description: Satellites JSON
+        in: body
+        name: satellites
+        required: true
+        schema:
+          $ref: '#/definitions/aggregate.TopSecretSplitRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/aggregate.TopSecretSplitRequest'
       summary: get the location and the decoded message
       tags:
       - Meli.QuasarFire

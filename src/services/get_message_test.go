@@ -34,7 +34,7 @@ func TestGetMessage(t *testing.T) {
 					"secreto",
 				},
 			},
-			expected: "mensaje secreto",
+			expected: "es mensaje secreto",
 		},
 	}
 

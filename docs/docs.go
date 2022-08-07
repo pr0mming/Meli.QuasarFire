@@ -53,6 +53,26 @@ const docTemplate = `{
         "/topsecret_split": {
             "get": {
                 "description": "get the location and the decoded message using the right POST data",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Meli.QuasarFire"
+                ],
+                "summary": "get the location and the decoded message",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/aggregate.TopSecretResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/topsecret_split/{fs_name}/{ss_name}/{ts_name}": {
+            "post": {
+                "description": "get the location and the decoded message using the right POST data",
                 "consumes": [
                     "application/json"
                 ],
@@ -65,12 +85,33 @@ const docTemplate = `{
                 "summary": "get the location and the decoded message",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "First Satellite name",
+                        "name": "fs_name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Seconds Satellite name",
+                        "name": "ss_name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Third Satellite name",
+                        "name": "ts_name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "Satellites JSON",
                         "name": "satellites",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/aggregate.TopSecretSplitSatelliteRequest"
+                            "$ref": "#/definitions/aggregate.TopSecretSplitRequest"
                         }
                     }
                 ],
@@ -78,7 +119,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/aggregate.TopSecretResponse"
+                            "$ref": "#/definitions/aggregate.TopSecretSplitRequest"
                         }
                     }
                 }
@@ -133,6 +174,17 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "aggregate.TopSecretSplitRequest": {
+            "type": "object",
+            "properties": {
+                "satellites": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/aggregate.TopSecretSplitSatelliteRequest"
+                    }
                 }
             }
         },
