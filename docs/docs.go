@@ -49,6 +49,40 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/topsecret_split": {
+            "get": {
+                "description": "get the location and the decoded message using the right POST data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Meli.QuasarFire"
+                ],
+                "summary": "get the location and the decoded message",
+                "parameters": [
+                    {
+                        "description": "Satellites JSON",
+                        "name": "satellites",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/aggregate.TopSecretSplitSatelliteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/aggregate.TopSecretResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -99,6 +133,20 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "aggregate.TopSecretSplitSatelliteRequest": {
+            "type": "object",
+            "properties": {
+                "distance": {
+                    "type": "number"
+                },
+                "message": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }

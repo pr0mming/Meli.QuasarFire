@@ -16,11 +16,13 @@ import (
 func Wire() *provider.Server {
 	panic(wire.Build(
 		wire.NewSet(
-			provider.ProvideHandler,
+			provider.ProvideTopSecretHandler,
+			provider.ProvideTopSecretSplitHandler,
 			provider.ProvideService,
 			provider.ProvideServer,
 
 			wire.Bind(new(interfaces.ITopSecretHandler), new(*handlers.TopSecretHandler)),
+			wire.Bind(new(interfaces.ITopSecretSplitHandler), new(*handlers.TopSecretSplitHandler)),
 			wire.Bind(new(interfaces.ITopSecretService), new(*services.TopSecretService)),
 			wire.Bind(new(interfaces.IServer), new(*provider.Server)),
 		),

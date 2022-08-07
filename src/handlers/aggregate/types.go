@@ -1,5 +1,7 @@
 package aggregate
 
+// Normal Top Secret
+
 type TopSecretSatelliteRequest struct {
 	Name     string   `json:"name"`
 	Distance float32  `json:"distance"`
@@ -18,4 +20,11 @@ type TopSecretCoordsResponse struct {
 type TopSecretResponse struct {
 	Position TopSecretCoordsResponse `json:"position"`
 	Message  string                  `json:"message"`
+}
+
+// Split Top Secret
+
+type TopSecretSplitSatelliteRequest struct {
+	Distance float32  `json:"distance"`
+	Message  []string `json:"message"`
 }

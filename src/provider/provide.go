@@ -12,14 +12,18 @@ var (
 	server     *Server
 	serverOnce sync.Once
 
-	hdlTopSecret     *handlers.TopSecretHandler
-	hdlTopSecretOnce sync.Once
+	hdlTopSecret          *handlers.TopSecretHandler
+	hdlTopSecretOnce      sync.Once
+	hdlTopSecretSplit     *handlers.TopSecretSplitHandler
+	hdlTopSecretSplitOnce sync.Once
 
 	topSecretService     *services.TopSecretService
 	topSecretServiceOnce sync.Once
 )
 
-func ProvideHandler(s interfaces.ITopSecretService) *handlers.TopSecretHandler {
+// Handlers
+
+func ProvideTopSecretHandler(s interfaces.ITopSecretService) *handlers.TopSecretHandler {
 	hdlTopSecretOnce.Do(func() {
 		hdlTopSecret = &handlers.TopSecretHandler{
 			TopSecretService: s,
@@ -29,6 +33,18 @@ func ProvideHandler(s interfaces.ITopSecretService) *handlers.TopSecretHandler {
 	return hdlTopSecret
 }
 
+func ProvideTopSecretSplitHandler(s interfaces.ITopSecretService) *handlers.TopSecretSplitHandler {
+	hdlTopSecretSplitOnce.Do(func() {
+		hdlTopSecretSplit = &handlers.TopSecretSplitHandler{
+			TopSecretService: s,
+		}
+	})
+
+	return hdlTopSecretSplit
+}
+
+// Services and others
+
 func ProvideService() *services.TopSecretService {
 	topSecretServiceOnce.Do(func() {
 		topSecretService = &services.TopSecretService{}
@@ -37,10 +53,14 @@ func ProvideService() *services.TopSecretService {
 	return topSecretService
 }
 
-func ProvideServer(hdl interfaces.ITopSecretHandler) *Server {
+func ProvideServer(
+	_hdlTopSecret interfaces.ITopSecretHandler,
+	_hdlTopSecretSplit interfaces.ITopSecretSplitHandler,
+) *Server {
 	serverOnce.Do(func() {
 		server = &Server{
-			TopSecretHandler: hdl,
+			TopSecretHandler:      _hdlTopSecret,
+			TopSecretSplitHandler: _hdlTopSecretSplit,
 		}
 	})
 

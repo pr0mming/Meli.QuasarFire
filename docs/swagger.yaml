@@ -31,6 +31,15 @@ definitions:
       name:
         type: string
     type: object
+  aggregate.TopSecretSplitSatelliteRequest:
+    properties:
+      distance:
+        type: number
+      message:
+        items:
+          type: string
+        type: array
+    type: object
 info:
   contact: {}
 paths:
@@ -46,6 +55,28 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/aggregate.TopSecretRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/aggregate.TopSecretResponse'
+      summary: get the location and the decoded message
+      tags:
+      - Meli.QuasarFire
+  /topsecret_split:
+    get:
+      consumes:
+      - application/json
+      description: get the location and the decoded message using the right POST data
+      parameters:
+      - description: Satellites JSON
+        in: body
+        name: satellites
+        required: true
+        schema:
+          $ref: '#/definitions/aggregate.TopSecretSplitSatelliteRequest'
       produces:
       - application/json
       responses:

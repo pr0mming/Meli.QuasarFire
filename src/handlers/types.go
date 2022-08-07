@@ -7,3 +7,7 @@ import (
 type TopSecretHandler struct {
 	TopSecretService interfaces.ITopSecretService
 }
+
+type TopSecretSplitHandler struct {
+	TopSecretService interfaces.ITopSecretService
+}

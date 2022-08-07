@@ -10,10 +10,13 @@ func (server *Server) RegisterHandlers(r *gin.Engine) {
 
 	v1 := r.Group("/")
 	{
-		topSecretHdl := server.TopSecretHandler
 
 		// Register your endpoints here with the handler
-		v1.POST("/topsecret", dispatchHandler(topSecretHdl.Handle))
+		// fs = First Satellite, ss = Seconds Satellite
+
+		v1.POST("/topsecret", dispatchHandler(server.TopSecretHandler.Handle))
+		v1.POST("/topsecret_split/:fs_name/:ss_name", dispatchHandler(server.TopSecretSplitHandler.Handle))
+		v1.GET("/topsecret_split/:fs_name/:fs_distance/:fs_message/:ss_name/:ss_distance/:ss_message", dispatchHandler(server.TopSecretSplitHandler.Handle))
 
 	}
 
