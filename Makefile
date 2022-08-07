@@ -4,4 +4,10 @@ generate:
 run:
 	go run main.go
 
-all: generate run
+test:
+	go test ./src/services -v
+
+swagger:
+	swag init
+
+all: generate swagger run

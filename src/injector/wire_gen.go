@@ -14,7 +14,8 @@ import (
 
 func Wire() *provider.Server {
 	topSecretService := provider.ProvideService()
-	topSecretHandler := provider.ProvideHandler(topSecretService)
-	server := provider.ProvideServer(topSecretHandler)
+	topSecretHandler := provider.ProvideTopSecretHandler(topSecretService)
+	topSecretSplitHandler := provider.ProvideTopSecretSplitHandler(topSecretService)
+	server := provider.ProvideServer(topSecretHandler, topSecretSplitHandler)
 	return server
 }
