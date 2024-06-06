@@ -14,15 +14,15 @@ import (
 // @Description get the location and the decoded message using the right POST data
 // @Tags Meli.QuasarFire
 // @Produce json
-// @QueryParam fs_name path string true "First Satellite name"
-// @QueryParam fs_distance path number true "First Satellite distance"
-// @QueryParam fs_message path string true "First Satellite message"
-// @QueryParam ss_name path string true "Seconds Satellite name"
-// @QueryParam ss_distance path number true "Second Satellite distance"
-// @QueryParam ss_message path string true "Second Satellite message"
-// @QueryParam ts_name path string true "Third Satellite name"
-// @QueryParam ts_distance path number true "Third Satellite distance"
-// @QueryParam ts_message path string true "Third Satellite message"
+// @Param name query string true "First Satellite name"
+// @Param fs_distance query number true "First Satellite distance"
+// @Param fs_message query string true "First Satellite message"
+// @Param ss_name query string true "Second Satellite name"
+// @Param ss_distance query number true "Second Satellite distance"
+// @Param ss_message query string true "Second Satellite message"
+// @Param ts_name query string true "Third Satellite name"
+// @Param ts_distance query number true "Third Satellite distance"
+// @Param ts_message query string true "Third Satellite message"
 // @Success 200 {object} aggregate.TopSecretResponse
 // @Router /topsecret_split [get]
 func (s *TopSecretSplitHandler) HandleGet(c *gin.Context) (interface{}, error) {
@@ -44,14 +44,14 @@ func (s *TopSecretSplitHandler) HandleGet(c *gin.Context) (interface{}, error) {
 				return nil, fmt.Errorf("problems when try to convert distance to number: %s", err.Error())
 			}
 
-			_message := c.Query(fmt.Sprintf("%s_%s", v, "message"))
+			message := c.Query(fmt.Sprintf("%s_%s", v, "message"))
 
-			message := strings.Split(strings.ReplaceAll(_message, "\"", ""), ",")
+			messageArr := strings.Split(strings.ReplaceAll(message, "\"", ""), ",")
 
 			data.Satellites = append(data.Satellites, aggregate.TopSecretSatelliteRequest{
 				Name:     name,
 				Distance: float32(distance),
-				Message:  message,
+				Message:  messageArr,
 			})
 
 		}

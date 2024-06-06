@@ -3,11 +3,13 @@ Small application for decode the secret message and get the location received fr
 
 Using Go and a lot of math :)
 
+This is a technical assessment solution for Mercado Libre.
+
 ## Technologies :rocket:
 
  - Go v1.17
- - Gin Gonic v1.8.1
- - Wire v0.5.0
+ - Gin Gonic v1.10.1
+ - Wire v0.6.0
 
 ## Startup :vertical_traffic_light:
 

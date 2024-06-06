@@ -54,13 +54,13 @@ func ProvideService() *services.TopSecretService {
 }
 
 func ProvideServer(
-	_hdlTopSecret interfaces.ITopSecretHandler,
-	_hdlTopSecretSplit interfaces.ITopSecretSplitHandler,
+	hdlTopSecret interfaces.ITopSecretHandler,
+	hdlTopSecretSplit interfaces.ITopSecretSplitHandler,
 ) *Server {
 	serverOnce.Do(func() {
 		server = &Server{
-			TopSecretHandler:      _hdlTopSecret,
-			TopSecretSplitHandler: _hdlTopSecretSplit,
+			TopSecretHandler:      hdlTopSecret,
+			TopSecretSplitHandler: hdlTopSecretSplit,
 		}
 	})
 

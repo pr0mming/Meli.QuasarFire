@@ -58,13 +58,13 @@ func (s *TopSecretService) GetEnemyStarship(parameters *aggregate.TopSecretReque
 	}
 
 	// Get the distance between the two starships (positions)
-	_xDiff := math.Pow(float64(starShipsPoints[1]["x"]-starShipsPoints[0]["x"]), 2)
-	_yDiff := math.Pow(float64(starShipsPoints[1]["y"]-starShipsPoints[0]["y"]), 2)
-	_distanceStarShips := float32(math.Sqrt(_xDiff + _yDiff))
+	xDiff := math.Pow(float64(starShipsPoints[1]["x"]-starShipsPoints[0]["x"]), 2)
+	yDiff := math.Pow(float64(starShipsPoints[1]["y"]-starShipsPoints[0]["y"]), 2)
+	distanceStarShips := float32(math.Sqrt(xDiff + yDiff))
 
 	// Append the distance in the first position,
 	// because the first one is the distance between the starships the others is the user distances given
-	distances = append([]float32{_distanceStarShips}, distances...)
+	distances = append([]float32{distanceStarShips}, distances...)
 
 	x, y := s.GetLocation(GetLocationStarshipPoints{
 		Point1: starShipsPoints[0],
@@ -124,20 +124,20 @@ func (s *TopSecretService) GetMessage(messages ...[]string) (msg string) {
 
 		for i, word := range m {
 
-			_word := strings.TrimSpace(word)
+			wordTrimmed := strings.TrimSpace(word)
 
-			if _word != "" {
+			if wordTrimmed != "" {
 
 				message := records[i]
 
 				// Save how many is repeated the word in the position
 				if message != nil {
 
-					message[_word] += 1
+					message[wordTrimmed] += 1
 
 				} else {
 
-					message = map[string]int{_word: 1}
+					message = map[string]int{wordTrimmed: 1}
 
 				}
 
