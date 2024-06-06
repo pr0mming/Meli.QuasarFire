@@ -14,7 +14,7 @@ import (
 // @Description get the location and the decoded message using the right POST data
 // @Tags Meli.QuasarFire
 // @Produce json
-// @Param name query string true "First Satellite name"
+// @Param fs_name query string true "First Satellite name"
 // @Param fs_distance query number true "First Satellite distance"
 // @Param fs_message query string true "First Satellite message"
 // @Param ss_name query string true "Second Satellite name"

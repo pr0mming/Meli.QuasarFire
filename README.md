@@ -3,8 +3,6 @@ Small application for decode the secret message and get the location received fr
 
 Using Go and a lot of math :)
 
-This is a technical assessment solution for Mercado Libre.
-
 ## Technologies :rocket:
 
  - Go v1.17
